@@ -1,0 +1,14 @@
+{
+  "name": "examen-final",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "dev": "node --watch ."
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
+
