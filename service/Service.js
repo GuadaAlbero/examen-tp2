@@ -7,22 +7,36 @@ class Service {
     return await this.dao.getAll();
   };
 
-  getById = async (id) => {
-    const item = await this.dao.getById(id);
-    if (!item) throw new Error("ID no encontrado");
-    return item;
-  };
+  createOrUpdate = async (data) => {
+    const { id, tipo, valor, timestamp } = data;
 
-  create = async (data) => {
-    return await this.dao.create(data);
-  };
+    const existente = await this.dao.getById(id);
 
-  update = async (id, data) => {
-    return await this.dao.update(id, data);
-  };
+    let alerta = null;
 
-  delete = async (id) => {
-    return await this.dao.delete(id);
+    if (tipo === "TEMPERATURA" && valor > 35) {
+      alerta = "TEMPERATURA alta";
+    }
+
+    if (tipo === "HUMEDAD" && valor < 20) {
+      alerta = "HUMEDAD baja";
+    }
+
+    if (tipo === "CO2" && valor > 1000) {
+      alerta = "CO2 alto";
+    }
+
+    const lecturaParaGuardar = { id, tipo, valor, timestamp };
+
+    const lecturaParaResponder = { ...lecturaParaGuardar, alerta };
+
+    if (existente) {
+      await this.dao.update(id, lecturaParaGuardar);
+      return lecturaParaResponder;
+    }
+
+    await this.dao.create(lecturaParaGuardar);
+    return lecturaParaResponder;
   };
 }
 

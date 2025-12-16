@@ -16,18 +16,13 @@ class Dao {
 
   update = async (id, newData) => {
     const index = this.data.findIndex(item => item.id === id);
-    if (index === -1) throw new Error("ID no encontrado");
+
+    if (index === -1) {
+      throw new Error("ID no encontrado");
+    }
 
     this.data[index] = { ...this.data[index], ...newData };
     return this.data[index];
-  };
-
-  delete = async (id) => {
-    const index = this.data.findIndex(item => item.id === id);
-    if (index === -1) throw new Error("ID no encontrado");
-
-    this.data.splice(index, 1);
-    return true;
   };
 }
 
